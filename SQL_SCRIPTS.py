@@ -26,6 +26,11 @@ def select_all(cursor, db_table):
     for row in rows:
         print(row)
 
+def drop_table(cursor, db_table):
+    try:
+        cursor.execute(f'DROP TABLE IF EXISTS {db_table}')
+    except:
+        print("error occurred when dropping table")
 # print("User table created successfully")
 # print("test user added to db successfully ")
 # select_all(db_cursor, 'user')
