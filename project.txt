@@ -1,0 +1,16 @@
+password_manager/
+│
+├── main.py
+├── auth.py
+├── database.py
+├── models.py
+├── services.py
+├── cli.py
+└── utils.py
+
+
+get_user()
+create_user()
+store_password()
+get_passwords()
+delete_password()
