@@ -1,4 +1,5 @@
 from db import create_user
+from crypto import create_hash_salt, validate_user
 
 
 def home():
@@ -34,7 +35,7 @@ def create_account():
             master_password_input
         )
         if creation_result == "User created successfully.":
-            login()
+            user_interface()
         else:
             print("AN ERROR OCCURRED WHEN CREATING A USER. PLEASE TRY AGAIN LATER.")
             create_account()
@@ -45,6 +46,11 @@ def login():
     print("********************LOGIN********************")
     username_input = str(input("ENTER USERNAME: "))
     master_password_input = str(input("ENTER MASTER PASSWORD: "))
+    validate_user(username_input, master_password_input)
+
+
+    
+
 
 
 def user_interface():

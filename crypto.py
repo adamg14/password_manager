@@ -12,8 +12,11 @@ def create_hash_salt(password):
 
 def verify_password(hashed_password, input_password):
     input_password = input_password.encode('utf-8')
-    if bcrypt.checkpw(input_password, hashed_password=hashed_password):
+    if bcrypt.checkpw(input_password, hashed_password=hashed_password.encode('utf-8')):
         return True
     else:
         return False
+    
+
+
     
