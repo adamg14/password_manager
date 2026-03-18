@@ -1,6 +1,6 @@
 import pytest
 from crypto import verify_password, create_hash_salt
-from SQL_SCRIPTS import db_cursor
+from db import db_cursor
 
 @pytest.mark.parametrize(
         "password, attempt, expected",
@@ -37,6 +37,7 @@ def test_db_connection():
         ("user", True),
     ]
 )
+
 def test_user_table_exists(table_name, expected):
     query = db_cursor.execute(f"SELECT * FROM {table_name};")
     query_result = db_cursor.fetchone()
