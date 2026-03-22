@@ -35,12 +35,24 @@ def get_user(
     cursor,
     username
     ):
-    cursor.execute("""SELECT * FROM user WHERE username = {username}""")
+    cursor.execute(f"""SELECT * FROM user WHERE username = {username}""")
     row = cursor.fetchone()
     return row
 
 
+@database_function
+def validate_user(
+    cursor,
+    username,
+    master_password
+):
+    user = get_user(cursor, username)
+    input_hash = hashing.generated_hash(master_password).decode()
 
+    if input_hash == user[1]:
+        return True
+    else:
+        return False
 
 
     
