@@ -18,3 +18,7 @@ def key_derivation_function(
     key = PBKDF2(master_password, salt, 32, count=1000000, hmac_hash_module=SHA512)
     return salt, key
 
+
+def create_salt():
+    return get_random_bytes(16)
+
