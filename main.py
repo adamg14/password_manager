@@ -1,15 +1,19 @@
-from db import create_user
-from crypto import create_hash_salt, validate_user
 
-
+BANNER = """
+ ___       _                    _       ____                                         _   __  __
+/ _ \   __| | __ _ _ __ ___   ( )___  |  _ \ __ _ ___ _____      _____  _ __ __| | |  \/  | __ _ _ __   __ _  __ _  ___ _ __
+| |_| | / _` |/ _` | '_ ` _ \ |// __| | |_) / _` / __/ __\\ \\ /\\ / / _ \| '__/ _` | | |\/| |/ _` | '_ \\ / _` |/ _` |/ _ \\ '__|
+|  _  || (_| | (_| | | | | | |   \\__ \\ |  __/ (_| \\__ \\__ \\\\ V  V / (_) | | | (_| | | |  | | (_| | | | | (_| | (_| |  __/ |
+|_| |_| \\__,_|\\__,_|_| |_| |_|   |___/ |_|   \\__,_|___/___/ \\_/\\_/ \\___/|_|  \\__,_| |_|  |_|\\__,_|_| |_|\\__,_|\\__, |\\___|_|
+                                                                                                                   |___/"""
 def home():
-    print("********************PASSWORD MANAGER********************")
-    print("********************SELECT AN OPTION********************")
-    print("1. LOGIN")
-    print("2. CREATE AN ACCOUNT")
-    print("3. EXIT")
-    user_login_input = int(input("ENTER YOUR OPTION HERE: "))
-
+    print(BANNER)
+    print("zero-knowledge. AES encrypted.")
+    print("")
+    print("1. Login")
+    print("2. create an account")
+    print("Select ctrl + c to exit")
+    user_login_input = int(input("select and option "))
     if user_login_input == 1:
         login()
     elif user_login_input == 2:
@@ -46,7 +50,7 @@ def login():
     print("********************LOGIN********************")
     username_input = str(input("ENTER USERNAME: "))
     master_password_input = str(input("ENTER MASTER PASSWORD: "))
-    validate_user(username_input, master_password_input)
+    # validate_user(username_input, master_password_input)
 
 
     
