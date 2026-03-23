@@ -1,5 +1,6 @@
-from database_wrapper import database 
-
+from database_wrapper import database_function 
+from get_user import get_user
+from cryptography.hashing import generated_hash
 
 @database_function
 def validate_user(
@@ -8,7 +9,7 @@ def validate_user(
     master_password
 ):
     user = get_user(cursor, username)
-    input_hash = hashing.generated_hash(master_password).decode()
+    input_hash = generated_hash(master_password).decode()
 
     if input_hash == user[1]:
         return True
