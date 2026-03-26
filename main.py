@@ -1,3 +1,5 @@
+import sqlite3
+from querying import create_user
 
 BANNER = """
  ___       _                    _       ____                                         _   __  __
@@ -6,6 +8,10 @@ BANNER = """
 |  _  || (_| | (_| | | | | | |   \\__ \\ |  __/ (_| \\__ \\__ \\\\ V  V / (_) | | | (_| | | |  | | (_| | | | | (_| | (_| |  __/ |
 |_| |_| \\__,_|\\__,_|_| |_| |_|   |___/ |_|   \\__,_|___/___/ \\_/\\_/ \\___/|_|  \\__,_| |_|  |_|\\__,_|_| |_|\\__,_|\\__, |\\___|_|
                                                                                                                    |___/"""
+
+connection = sqlite3.connect("password_manager.db")
+cursor = connection.cursor()
+
 def home():
     print(BANNER)
     print("zero-knowledge. AES encrypted.")
@@ -28,15 +34,16 @@ def home():
 
 def create_account():
     print("********************CREATE ACCOUNT********************")
-    username_input = str(input("ENTER USERNAME: "))
-    master_password_input = str(input("ENTER MASTER PASSWORD: "))
+    username_input = str(input("Enter username: "))
+    master_password_input = str(input("Enter password: "))
 
     if len(username_input) < 3 or len(master_password_input) < 3:
         print("INVALID USERNAME OR PASSWORD")
     else:
         creation_result = create_user(
-            username_input,
-            master_password_input
+            cursor=cursor,
+            username=username_input,
+            master_password=     master_password_input
         )
         if creation_result == "User created successfully.":
             user_interface()

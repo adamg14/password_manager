@@ -1,6 +1,7 @@
 import sqlite3
 
-def database_function(function):
+
+def database_wrapper(function):
     def wrapper(*args, **kwargs):
         connection = sqlite3.connect("../password_manager.db")
         cursor = connection.cursor()

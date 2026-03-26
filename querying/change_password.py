@@ -1,5 +1,5 @@
-from database_wrapper import database_function
-from cryptography.hashing import generated_hash
+from datbase_wrapper.database_wrapper import database_function
+from crypto.hashing import generated_hash
 from datetime import datetime
 
 

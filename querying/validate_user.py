@@ -1,6 +1,6 @@
-from database_wrapper import database_function 
+from datbase_wrapper.database_wrapper import database_function 
 from get_user import get_user
-from cryptography.hashing import generated_hash
+from crypto.hashing import generated_hash
 
 @database_function
 def validate_user(

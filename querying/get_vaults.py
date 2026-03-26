@@ -1,4 +1,4 @@
-from database_wrapper import database_function
+from datbase_wrapper.database_wrapper import database_function
 
 
 @database_function

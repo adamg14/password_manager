@@ -1,12 +1,12 @@
-from database_wrapper import database_function
-from cryptography.crypto_keys import generate_aes_key
+from decorators.db_decorator import database_wrapper
+from crypto.crypto_keys import generate_aes_key
 from get_salt import get_salt
-from cryptography.kdf import key_derivation_function
-from cryptography.encryption import encryption
+from crypto.kdf import key_derivation_function
+from crypto.encryption import encryption
 import uuid
 
 
-@database_function
+@database_wrapper
 def create_valut(
     cursor,
     username,
