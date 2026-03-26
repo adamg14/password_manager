@@ -1,7 +1,7 @@
-from datbase_wrapper.database_wrapper import database_function
+from decorators.db_decorator import database_wrapper
 
 
-@database_function
+@database_wrapper
 def get_salt(
     cursor,
     username

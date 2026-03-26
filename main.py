@@ -1,5 +1,5 @@
 import sqlite3
-from querying import create_user
+from querying.create_user import create_user
 
 BANNER = """
  ___       _                    _       ____                                         _   __  __
@@ -41,16 +41,15 @@ def create_account():
         print("INVALID USERNAME OR PASSWORD")
     else:
         creation_result = create_user(
-            cursor=cursor,
             username=username_input,
             master_password=     master_password_input
         )
-        if creation_result == "User created successfully.":
-            user_interface()
+        if creation_result:
+            print("Creation successful. You are now able to login")
+            login()
         else:
-            print("AN ERROR OCCURRED WHEN CREATING A USER. PLEASE TRY AGAIN LATER.")
-            create_account()
-
+            print("An error occured when creating an account, please try again later.")
+            home()
 
 
 def login():

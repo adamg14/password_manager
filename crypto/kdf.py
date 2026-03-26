@@ -21,5 +21,5 @@ def key_derivation_function(
 
 
 def create_salt():
-    return get_random_bytes(16)
+    return get_random_bytes(16).hex()
 

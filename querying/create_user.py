@@ -11,13 +11,17 @@ def create_user(
         username,
         master_password
 ):
-    master_password_hash = generated_hash(master_password).decode()
-    salt = create_salt().decode()
+    try:
+        master_password_hash = generated_hash(master_password)
+        salt = create_salt()
 
-    cursor.execute(f"""
-    INSERT INTO user (username, master_password_hash, salt, create_at, update_at) VALUES ({username}, {master_password_hash}, {salt}, {datetime.now()}, {datetime.now()})
-                   """)
-    return True
+        cursor.execute(f"""
+        INSERT INTO users (username, master_password_hash, salt, created_at, updated_at) VALUES (?, ?, ?, ?, ?)
+                        """, (username, master_password_hash, salt, datetime.now(), datetime.now()))
+        return True
+    except Exception as e:
+        print(e)
+        return False
 
 
 
