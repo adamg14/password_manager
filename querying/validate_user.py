@@ -1,10 +1,10 @@
-from get_user import get_user
+from .get_user import get_user
 from crypto.hashing import generated_hash
 
 import sqlite3
 
-connection = sqlite3.connection("../password_manager.db")
-cursor = connection.curs
+connection = sqlite3.connect("../password_manager.db")
+cursor = connection.cursor()
 
 
 def validate_user(
@@ -22,5 +22,3 @@ def validate_user(
         return "user does not exist. please try again."
 
 
-
-validate_user()

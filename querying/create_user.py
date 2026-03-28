@@ -1,5 +1,5 @@
 from crypto.encryption import encryption
-from decorators.db_decorator import database_wrapper
+from database_decorators.db_decorator import database_wrapper
 from crypto.kdf import create_salt
 from crypto.hashing import generated_hash
 from datetime import datetime

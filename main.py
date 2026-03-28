@@ -62,7 +62,8 @@ def login():
         master_password_input
     )
     if login_result == True:
-        user_interface()
+        print("You have successfully logined in. Please continue.")
+        user_interface(username_input, master_password_input)
     elif login_result == False:
         print("Incorrect username or password. Please Try again.")
         login()
@@ -74,7 +75,7 @@ def login():
 
 
 
-def user_interface():
+def user_interface(username, master_password):
     print("********************SELECT AN OPTION***************")
     print("1. Change password")
     print("2. Create vault")
@@ -84,4 +85,5 @@ def user_interface():
     
 
 if __name__ == '__main__':  
-    home()
+    # home()
+    login()
