@@ -18,3 +18,24 @@ def database_wrapper(function):
         finally:
             connection.close()
     return wrapper
+
+def database_query_wrapper(function):
+    def wrapper(*args, **kwargs):
+        try:
+            connection = sqlite3.connect(DB_PATH)
+            cursor = connection.cursor()
+
+            result = function(*args, **kwargs)
+            query = result[0]
+            params = result[2]
+
+            cursor.execute(query, params)
+            connection.commit()
+
+            return True
+        except Exception as e:
+            return e
+        finally:
+            connection.close()
+    
+    return wrapper

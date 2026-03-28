@@ -1,6 +1,8 @@
 import sqlite3
 from querying.create_user import create_user
 from querying.validate_user import validate_user
+from querying.change_password import change_master_password
+
 
 BANNER = """
  ___       _                    _       ____                                         _   __  __
@@ -82,6 +84,14 @@ def user_interface(username, master_password):
     print("3. View vaults")
     print("4. Logout")
     user_input = int(input("Please enter your select: "))
+
+    if user_input == 1:
+        user_input_2 = str(input("Enter your new password: "))
+        password_change_result = change_master_password(
+            username,
+            
+        )
+        
     
 
 if __name__ == '__main__':  

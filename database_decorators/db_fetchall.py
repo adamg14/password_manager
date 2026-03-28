@@ -23,3 +23,5 @@ def fetch_all(function):
             return e
         finally:
             connection.close()
+        
+    return wrapper
