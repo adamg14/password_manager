@@ -1,6 +1,6 @@
 import sqlite3
 from querying.create_user import create_user
-
+from querying.validate_user import validate_user
 BANNER = """
  ___       _                    _       ____                                         _   __  __
 / _ \   __| | __ _ _ __ ___   ( )___  |  _ \ __ _ ___ _____      _____  _ __ __| | |  \/  | __ _ _ __   __ _  __ _  ___ _ __

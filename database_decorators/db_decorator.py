@@ -7,12 +7,14 @@ DB_PATH = os.path.join(FILE_PATH, "..", "password_manager.db")
 
 def database_wrapper(function):
     def wrapper(*args, **kwargs):
-        connection = sqlite3.connect(DB_PATH)
-        cursor = connection.cursor()
         try:
+            connection = sqlite3.connect(DB_PATH)
+            cursor = connection.cursor()
             result = function(cursor, *args, **kwargs)
             connection.commit()
             return result
+        except Exception as e:
+            return e
         finally:
             connection.close()
     return wrapper
