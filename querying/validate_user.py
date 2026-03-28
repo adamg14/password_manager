@@ -20,7 +20,7 @@ def validate_user(
             return False
     else:
         return "user does not exist. please try again."
-    return user 
+
 
 
 validate_user()

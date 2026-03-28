@@ -1,6 +1,7 @@
 import sqlite3
 from querying.create_user import create_user
 from querying.validate_user import validate_user
+
 BANNER = """
  ___       _                    _       ____                                         _   __  __
 / _ \   __| | __ _ _ __ ___   ( )___  |  _ \ __ _ ___ _____      _____  _ __ __| | |  \/  | __ _ _ __   __ _  __ _  ___ _ __
@@ -56,19 +57,28 @@ def login():
     print("********************LOGIN********************")
     username_input = str(input("ENTER USERNAME: "))
     master_password_input = str(input("ENTER MASTER PASSWORD: "))
-    # validate_user(username_input, master_password_input)
-
+    login_result = validate_user(
+        username_input,
+        master_password_input
+    )
+    if login_result == True:
+        user_interface()
+    elif login_result == False:
+        print("Incorrect username or password. Please Try again.")
+        login()
+    else:
+        print("This user does not exist. Please register for an account.")
+        create_account()
 
     
 
 
 
 def user_interface():
-    print("********************HOME PAGE********************")
     print("********************SELECT AN OPTION***************")
-    print("1. Create new passord")
-    print("2. Get a current password")
-    print("3. Delete a password")
+    print("1. Change password")
+    print("2. Create vault")
+    print("3. View vaults")
     print("4. Logout")
     user_input = int(input("Please enter your select: "))
     
