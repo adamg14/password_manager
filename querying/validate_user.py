@@ -1,17 +1,26 @@
-from datbase_wrapper.database_wrapper import database_function 
 from get_user import get_user
 from crypto.hashing import generated_hash
 
-@database_function
+import sqlite3
+
+connection = sqlite3.connection("../password_manager.db")
+cursor = connection.curs
+
+
 def validate_user(
-    cursor,
     username,
     master_password
 ):
-    user = get_user(cursor, username)
-    input_hash = generated_hash(master_password).decode()
-
-    if input_hash == user[1]:
-        return True
+    user = get_user(username)
+    if user:
+        stored_master_password = user[1]
+        if stored_master_password == generated_hash(master_password=master_password):
+            return  True
+        else:
+            return False
     else:
-        return False
+        return "user does not exist. please try again."
+    return user 
+
+
+validate_user()

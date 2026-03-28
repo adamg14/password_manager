@@ -1,11 +1,10 @@
-from datbase_wrapper.database_wrapper import database_function
+from database_decorators.db_fetchone import fetch_one
 
 
-@database_function
+@fetch_one
 def get_user(
-    cursor,
     username
-    ):
-    cursor.execute(f"""SELECT * FROM user WHERE username = {username}""")
-    return cursor.fetchone()
+):
+    query = f"""SELECT * FROM users WHERE username = ?"""
+    return query, (username,)
 
