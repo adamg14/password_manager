@@ -1,12 +1,11 @@
-from decorators.db_decorator import database_wrapper
+from database_decorators.db_fetchone import fetch_one
 
 
-@database_wrapper
+@fetch_one
 def get_salt(
-    cursor,
     username
 ):
-    cursor.execute(f"""
-    SELECT salt FROM user WHERE username = {username}
-                   """)
-    return cursor.fetchone()
+    query = f"""SELECT salt FROM users WHERE username = ?"""
+    return query, (username,)
+
+

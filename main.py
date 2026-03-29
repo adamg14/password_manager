@@ -1,8 +1,9 @@
 import sqlite3
+import time
 from querying.create_user import create_user
 from querying.validate_user import validate_user
 from querying.change_password import change_master_password
-import time
+from querying.create_vault import create_valut
 
 
 BANNER = """
@@ -83,6 +84,7 @@ def user_interface(username, master_password):
     print("1. Change password")
     print("2. Create vault")
     print("3. View vaults")
+    print("4. Select a vault")
     print("4. Logout")
     user_input = int(input("Please enter your select: "))
 
@@ -107,7 +109,20 @@ def user_interface(username, master_password):
                 username,
                 master_password
             )
+    
+    if user_input == 2:
+        vault_name_input = str(input("Enter a name for your vault (e.g. GMail): "))
 
+        vault_creation = create_valut(
+            username,
+            master_password,
+            vault_name_input,
+        )
+
+        if vault_creation == True:
+            print("Your vault has been created successfully.")
+        else:
+            print("An error occured during the creation of the vault. Please try again.")
     
 
 if __name__ == '__main__':  
