@@ -18,7 +18,6 @@ def fetch_one(function):
             cursor.execute(query, params)
 
             db_result = cursor.fetchone()
-
             return db_result
         except Exception as e:
             return e

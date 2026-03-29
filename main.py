@@ -2,6 +2,7 @@ import sqlite3
 from querying.create_user import create_user
 from querying.validate_user import validate_user
 from querying.change_password import change_master_password
+import time
 
 
 BANNER = """
@@ -89,11 +90,25 @@ def user_interface(username, master_password):
         user_input_2 = str(input("Enter your new password: "))
         password_change_result = change_master_password(
             username,
-            
+            user_input_2
         )
         
+        if password_change_result:
+            print("Your password has been changed.")
+            time.sleep(5)
+            user_interface(
+                username,
+                user_input_2
+            )
+        else:
+            print("An error occured. Please try again")
+            time.sleep(5)
+            user_interface(
+                username,
+                master_password
+            )
+
     
 
 if __name__ == '__main__':  
-    # home()
-    login()
+    home()

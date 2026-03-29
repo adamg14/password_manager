@@ -22,16 +22,18 @@ def database_wrapper(function):
 def database_query_wrapper(function):
     def wrapper(*args, **kwargs):
         try:
+            print("function called")
             connection = sqlite3.connect(DB_PATH)
             cursor = connection.cursor()
 
             result = function(*args, **kwargs)
+            print(result)
             query = result[0]
             params = result[2]
 
             cursor.execute(query, params)
             connection.commit()
-
+            print("query committed")
             return True
         except Exception as e:
             return e
