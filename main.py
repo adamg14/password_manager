@@ -4,7 +4,8 @@ from querying.create_user import create_user
 from querying.validate_user import validate_user
 from querying.change_password import change_master_password
 from querying.create_vault import create_valut
-
+from querying.get_vaults import get_vaults
+from querying.retrieve_vault import retrieve_vault
 
 BANNER = """
  ___       _                    _       ____                                         _   __  __
@@ -123,6 +124,28 @@ def user_interface(username, master_password):
             print("Your vault has been created successfully.")
         else:
             print("An error occured during the creation of the vault. Please try again.")
+    
+    if user_input == 3:
+        vaults_response = get_vaults(
+            username
+        )
+        if len(vaults_response) == 0:
+            print("You currently do not have any vaults.")
+            time.sleep(2)
+            user_interface(username, master_password)
+        else:
+            for vault in vaults_response:
+                print(vault)
+    if user_input == 4:
+        vault_input = str(input("Enter the name of the vault you want to access: "))
+
+        vault_details = retrieve_vault(
+            username,
+            vault_input
+        )
+
+
+
     
 
 if __name__ == '__main__':  

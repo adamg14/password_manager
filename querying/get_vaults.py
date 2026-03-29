@@ -1,13 +1,9 @@
+from database_decorators.db_fetchall import fetch_all
 
 
-
-@database_function
+@fetch_all
 def get_vaults(
-    cursor,
     username
 ):
-    cursor.execute("""
-    SELECT * FROM values WHERE username = {username}
-                   """)
-    
-    return cursor.fetchall()
+    query = f"""SELECT * FROM vaults WHERE username = ?"""
+    return query, (username, )
