@@ -4,5 +4,5 @@ CREATE TABLE IF NOT EXISTS entries (
     type TEXT NOT NULL DEFAULT 'login',
     encrypted_data TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT now()
-    updated_at
+    updated_at TIMESTAMP DEFAULT now()
 )
