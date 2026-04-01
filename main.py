@@ -19,23 +19,33 @@ BANNER = """
 connection = sqlite3.connect("password_manager.db")
 cursor = connection.cursor()
 
+
+def get_number(prompt, valid_selection):
+    while True:
+        try:
+            if int(input(prompt)) in valid_selection:
+                return int(input(prompt))
+            else:
+                raise ValueError
+        except ValueError:
+            print("Invalid selection. ")
+
+
 def home():
     print(BANNER)
     print("zero-knowledge. AES encrypted.")
-    print("")
-    print("1. Login")
-    print("2. create an account")
+    for key, (label, label_function) in menu_options.items():
+        print(f"{key}. {label}")
+
     print("Select ctrl + c to exit")
-    user_login_input = int(input("select and option "))
-    if user_login_input == 1:
-        login()
-    elif user_login_input == 2:
-        create_account()
-    elif user_login_input == 3:
-        exit()
+    choice = str(input("select an option: "))
+    action = menu_options.get(choice, None)
+    if action:
+        label, label_function = action
+        if label_function:
+            label_function()
     else:
-        print("INVALID OPTION SELECTED. PLEASE TRY AGAIN.")
-        home()
+        print("invalid select. please try again.")
 
 
 
@@ -79,8 +89,6 @@ def login():
 
     
 
-
-
 def user_interface(username, master_password):
     print("********************SELECT AN OPTION***************")
     print("1. Change password")
@@ -88,7 +96,7 @@ def user_interface(username, master_password):
     print("3. View vaults")
     print("4. Select a vault")
     print("4. Logout")
-    user_input = int(input("Please enter your select: "))
+    user_input = get_number("Please enter your selection: ")
 
     if user_input == 1:
         user_input_2 = str(input("Enter your new password: "))
@@ -138,7 +146,7 @@ def user_interface(username, master_password):
             for vault in vaults_response:
                 print(vault)
     if user_input == 4:
-        vault_input = int(input("Enter the name of the vault you want to access: "))
+        vault_input = str(input("Enter the name of the vault you want to access: "))
         vault_details = retrieve_vault(
             username,
             vaults_response[vault_input - 1]
@@ -195,6 +203,11 @@ def vault_interface(
         # option to edit password in vaults
 
     
+menu_options = {
+    "1": ("Login", login),
+    "2": ("Create Account", create_account)
+
+}
 
 if __name__ == '__main__':  
     home()

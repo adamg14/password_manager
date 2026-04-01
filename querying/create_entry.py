@@ -1,5 +1,5 @@
 from crypto.encryption import encryption
-from database_decorators import database_wrapper
+from database_decorators.db_decorator import database_wrapper
 from .get_salt import get_salt
 from crypto.decryption import decryption
 from crypto.encryption import encryption
