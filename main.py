@@ -19,23 +19,34 @@ BANNER = """
 connection = sqlite3.connect("password_manager.db")
 cursor = connection.cursor()
 
+
+def get_number(prompt, valid_selection):
+    while True:
+        try:
+            number = int(input(prompt))
+            if number in valid_selection:
+                return number
+            else:
+                raise ValueError
+        except ValueError:
+            print("Invalid selection. ")
+
+
 def home():
     print(BANNER)
     print("zero-knowledge. AES encrypted.")
-    print("")
-    print("1. Login")
-    print("2. create an account")
+    for key, (label, label_function) in menu_options.items():
+        print(f"{key}. {label}")
+
     print("Select ctrl + c to exit")
-    user_login_input = int(input("select and option "))
-    if user_login_input == 1:
-        login()
-    elif user_login_input == 2:
-        create_account()
-    elif user_login_input == 3:
-        exit()
+    choice = str(input("select an option: "))
+    action = menu_options.get(choice, None)
+    if action:
+        label, label_function = action
+        if label_function:
+            label_function()
     else:
-        print("INVALID OPTION SELECTED. PLEASE TRY AGAIN.")
-        home()
+        print("invalid select. please try again.")
 
 
 
@@ -53,32 +64,48 @@ def create_account():
         )
         if creation_result:
             print("Creation successful. You are now able to login")
-            login()
+            handle_login()
         else:
             print("An error occured when creating an account, please try again later.")
             home()
+
+
+def handle_login():
+    username, password = login()
+    login_result = validate_user(
+        username,
+        password
+    )
+
+    if login_result:
+        return username, password
+    elif login_result is False:
+        print("Incorrect credentials")
+        return None
+    else:
+        print("You have not registered")
+        time.sleep(2)
+        create_account()
 
 
 def login():
     print("********************LOGIN********************")
     username_input = str(input("ENTER USERNAME: "))
     master_password_input = str(input("ENTER MASTER PASSWORD: "))
-    login_result = validate_user(
-        username_input,
-        master_password_input
-    )
-    if login_result == True:
-        print("You have successfully logined in. Please continue.")
-        user_interface(username_input, master_password_input)
-    elif login_result == False:
-        print("Incorrect username or password. Please Try again.")
-        login()
-    else:
-        print("This user does not exist. Please register for an account.")
-        create_account()
+    return username_input, master_password_input
 
     
-
+def handle_change_password(username, new_password):
+    if change_master_password(
+        username,
+        new_password
+    ):
+        print("Your password has been changed.")
+        time.sleep(5)
+        user_interface(
+            username,
+            new_password
+        )
 
 
 def user_interface(username, master_password):
@@ -87,15 +114,13 @@ def user_interface(username, master_password):
     print("2. Create vault")
     print("3. View vaults")
     print("4. Select a vault")
-    print("4. Logout")
-    user_input = int(input("Please enter your select: "))
-
+    print("5. Logout")
+        
+    user_input = get_number("Please enter your selection: ", [1, 2, 3, 4])
+    
     if user_input == 1:
-        user_input_2 = str(input("Enter your new password: "))
-        password_change_result = change_master_password(
-            username,
-            user_input_2
-        )
+        new_password = str(input("Enter your new password: "))
+        handle_change_password(username, new_password)
         
         if password_change_result:
             print("Your password has been changed.")
@@ -135,20 +160,21 @@ def user_interface(username, master_password):
             time.sleep(2)
             user_interface(username, master_password)
         else:
+            counter = 1
             for vault in vaults_response:
-                print(vault)
+                print(f"{counter}. {vault[0]}")
+                counter += 1
     if user_input == 4:
-        vault_input = int(input("Enter the name of the vault you want to access: "))
+        vaults_response = get_vaults(
+            username
+        )
+        vault_input = str(input("Enter the name of the vault you want to access: "))
         vault_details = retrieve_vault(
             username,
-            vaults_response[vault_input - 1]
+            vault_input
         )
 
-        vault_interface(
-            username,
-            master_password,
-            vault_details
-        )
+        
 
 
 def vault_interface(
@@ -195,6 +221,12 @@ def vault_interface(
         # option to edit password in vaults
 
     
+menu_options = {
+    "1": ("Login", handle_login),
+    "2": ("Create Account", create_account)
 
-if __name__ == '__main__':  
-    home()
+}
+
+if __name__ == '__main__':
+    while True:
+        home()
