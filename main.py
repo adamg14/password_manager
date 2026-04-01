@@ -23,8 +23,9 @@ cursor = connection.cursor()
 def get_number(prompt, valid_selection):
     while True:
         try:
-            if int(input(prompt)) in valid_selection:
-                return int(input(prompt))
+            number = int(input(prompt))
+            if number in valid_selection:
+                return number
             else:
                 raise ValueError
         except ValueError:
@@ -78,6 +79,10 @@ def handle_login():
 
     if login_result:
         print("You have successfully logined in. Please continue.")
+        user_interface(
+            username,
+            password
+        )
     elif login_result == False:
         print("Incorrect username or password. Please Try again.")
         handle_login()
@@ -90,7 +95,7 @@ def login():
     print("********************LOGIN********************")
     username_input = str(input("ENTER USERNAME: "))
     master_password_input = str(input("ENTER MASTER PASSWORD: "))
-    return user_input, master_password_input
+    return username_input, master_password_input
 
     
 
@@ -100,7 +105,7 @@ def user_interface(username, master_password):
     print("2. Create vault")
     print("3. View vaults")
     print("4. Select a vault")
-    print("4. Logout")
+    print("5. Logout")
     user_input = get_number("Please enter your selection: ", [1, 2, 3, 4])
 
     if user_input == 1:
@@ -148,20 +153,21 @@ def user_interface(username, master_password):
             time.sleep(2)
             user_interface(username, master_password)
         else:
+            counter = 1
             for vault in vaults_response:
-                print(vault)
+                print(f"{counter}. {vault[0]}")
+                counter += 1
     if user_input == 4:
+        vaults_response = get_vaults(
+            username
+        )
         vault_input = str(input("Enter the name of the vault you want to access: "))
         vault_details = retrieve_vault(
             username,
-            vaults_response[vault_input - 1]
+            vault_input
         )
 
-        vault_interface(
-            username,
-            master_password,
-            vault_details
-        )
+        
 
 
 def vault_interface(

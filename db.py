@@ -12,4 +12,7 @@ cursor = connection.cursor()
 #         updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 #     )
 # """)
+cursor.execute("""
+INSERT INTO entries (id, vault_id, type, encrypted_data) VALUES(?, ?, ?, ?)""", (1, ))
+print(cursor.fetchall())
 connection.commit()
