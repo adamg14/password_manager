@@ -63,29 +63,34 @@ def create_account():
         )
         if creation_result:
             print("Creation successful. You are now able to login")
-            login()
+            handle_login()
         else:
             print("An error occured when creating an account, please try again later.")
             home()
+
+
+def handle_login():
+    username, password = login()
+    login_result = validate_user(
+        username,
+        password
+    )
+
+    if login_result:
+        print("You have successfully logined in. Please continue.")
+    elif login_result == False:
+        print("Incorrect username or password. Please Try again.")
+        handle_login()
+    else:
+        print("This user does not exist. Please register for an account.")
+        create_account()
 
 
 def login():
     print("********************LOGIN********************")
     username_input = str(input("ENTER USERNAME: "))
     master_password_input = str(input("ENTER MASTER PASSWORD: "))
-    login_result = validate_user(
-        username_input,
-        master_password_input
-    )
-    if login_result == True:
-        print("You have successfully logined in. Please continue.")
-        user_interface(username_input, master_password_input)
-    elif login_result == False:
-        print("Incorrect username or password. Please Try again.")
-        login()
-    else:
-        print("This user does not exist. Please register for an account.")
-        create_account()
+    return user_input, master_password_input
 
     
 
@@ -96,7 +101,7 @@ def user_interface(username, master_password):
     print("3. View vaults")
     print("4. Select a vault")
     print("4. Logout")
-    user_input = get_number("Please enter your selection: ")
+    user_input = get_number("Please enter your selection: ", [1, 2, 3, 4])
 
     if user_input == 1:
         user_input_2 = str(input("Enter your new password: "))
@@ -204,7 +209,7 @@ def vault_interface(
 
     
 menu_options = {
-    "1": ("Login", login),
+    "1": ("Login", handle_login),
     "2": ("Create Account", create_account)
 
 }
