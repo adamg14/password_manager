@@ -109,18 +109,15 @@ def user_interface(username, master_password):
     user_input = get_number("Please enter your selection: ", [1, 2, 3, 4])
 
     if user_input == 1:
-        user_input_2 = str(input("Enter your new password: "))
-        password_change_result = change_master_password(
-            username,
-            user_input_2
-        )
+        new_password = str(input("Enter your new password: "))
+        password_change_result = change_master_password(username, new_password)
         
         if password_change_result:
             print("Your password has been changed.")
             time.sleep(5)
             user_interface(
                 username,
-                user_input_2
+                new_password
             )
         else:
             print("An error occured. Please try again")
@@ -220,5 +217,6 @@ menu_options = {
 
 }
 
-if __name__ == '__main__':  
-    home()
+if __name__ == '__main__':
+    while True:
+        home()
