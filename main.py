@@ -78,13 +78,16 @@ def handle_login():
     )
 
     if login_result:
-        return username, password
-    elif login_result is False:
-        print("Incorrect credentials")
-        return None
+        print("You have successfully logined in. Please continue.")
+        user_interface(
+            username,
+            password
+        )
+    elif login_result == False:
+        print("Incorrect username or password. Please Try again.")
+        handle_login()
     else:
-        print("You have not registered")
-        time.sleep(2)
+        print("This user does not exist. Please register for an account.")
         create_account()
 
 
@@ -95,18 +98,6 @@ def login():
     return username_input, master_password_input
 
     
-def handle_change_password(username, new_password):
-    if change_master_password(
-        username,
-        new_password
-    ):
-        print("Your password has been changed.")
-        time.sleep(5)
-        user_interface(
-            username,
-            new_password
-        )
-
 
 def user_interface(username, master_password):
     print("********************SELECT AN OPTION***************")
@@ -115,19 +106,18 @@ def user_interface(username, master_password):
     print("3. View vaults")
     print("4. Select a vault")
     print("5. Logout")
-        
     user_input = get_number("Please enter your selection: ", [1, 2, 3, 4])
-    
+
     if user_input == 1:
         new_password = str(input("Enter your new password: "))
-        handle_change_password(username, new_password)
+        password_change_result = change_master_password(username, new_password)
         
         if password_change_result:
             print("Your password has been changed.")
             time.sleep(5)
             user_interface(
                 username,
-                user_input_2
+                new_password
             )
         else:
             print("An error occured. Please try again")
