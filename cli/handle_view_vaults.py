@@ -1,24 +1,19 @@
-from cli.vault import create_valut
-from user_interface import user_interface
+from api.get_vaults import get_vaults
+from cli.user_interface import user_interface
+
+import time
 
 
-def handle_view_vaults(
-        username,
-        master_password
-):
-    vault_name_input = str(input("Enter a name for your vault (e.g. GMail): "))
-    
-    vault_creation = create_valut(username, master_password, vault_name_input)
+def handle_view_vaults(username, master_password):
+    vaults_response = get_vaults(username)
 
-    if vault_creation:
-        print("Your vault has been created successfully.")
-        user_interface(
-            username,
-            master_password
-        )
+    if len(vaults_response) == 0:
+        print("You currently do not have any vaults.")
+        time.sleep(2)
     else:
-        print("An error occurred during the creation of the vault. Please try again.")
-        user_interface(
-            username,
-            master_password
-        )
+        counter = 1
+        for vault in vaults_response:
+            print(f"{counter}. {vault[0]}")
+            counter += 1
+
+    user_interface(username, master_password)

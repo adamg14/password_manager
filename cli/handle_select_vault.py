@@ -22,8 +22,9 @@ def handle_select_vault(
         counter = 1
         for vault in vaults_response:
             print(f"Vault {counter}: {vault[0]}")
-        
-        user_selection = get_number("Please select a vault", [i for i in range(1, counter)])
+            counter += 1
+
+        user_selection = get_number("Please select a vault: ", [i for i in range(1, counter)])
 
         selected_vault = retrieve_vault(username, vaults_response[user_selection - 1][0])
 

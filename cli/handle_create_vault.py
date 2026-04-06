@@ -17,7 +17,7 @@ def handle_create_vault(
     )
 
     if vault_creation:
-        print("The new_vault ({vault_name}) was created successfully.")
+        print(f"The new vault ({vault_name}) was created successfully.")
         time.sleep(5)
         user_interface(
             username,
