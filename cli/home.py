@@ -1,4 +1,5 @@
 from cli.auth import handle_login, create_account
+from cli.utils import get_number
 
 BANNER = """
  ___       _                    _       ____                                         _   __  __
@@ -21,7 +22,8 @@ def home():
         print(f"{key}. {label}")
 
     print("Select ctrl + c to exit")
-    choice = str(input("select an option: "))
+    choice = get_number("Select an option: ", [1, 2])
+    choice = str(choice)
     action = menu_options.get(choice, None)
     if action:
         label, label_function = action

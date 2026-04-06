@@ -4,8 +4,8 @@ from api.validate_user import validate_user
 
 def login():
     print("********************LOGIN********************")
-    username_input = str(input("ENTER USERNAME: "))
-    master_password_input = str(input("ENTER MASTER PASSWORD: "))
+    username_input = str(input("Enter username: "))
+    master_password_input = str(input("Enter master password: "))
     return username_input, master_password_input
 
 
@@ -15,7 +15,7 @@ def handle_login():
 
     if login_result:
         print("You have successfully logged in. Please continue.")
-        from cli.vault import user_interface
+        from cli.user_interface import user_interface
         user_interface(username, password)
     elif login_result == False:
         print("Incorrect username or password. Please try again.")
