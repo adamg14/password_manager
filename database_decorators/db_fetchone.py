@@ -20,7 +20,8 @@ def fetch_one(function):
             db_result = cursor.fetchone()
             return db_result
         except Exception as e:
-            return e
+            print(f"Database error: {e}")
+            return None
         finally:
             connection.close()
     return wrapper

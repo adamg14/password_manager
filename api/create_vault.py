@@ -13,24 +13,17 @@ def create_valut(
     valut_name,
 ):
     
-    # encrypt the vault key using the master password
-    # retieved the salt dedicated to the user
+    # retrieve the salt dedicated to the user
     stored_salt = get_salt(username)[0]
-    print(f"this should be the stored salt {stored_salt}")
 
-    # pass the salt and the master password to derive the key stored to the derivation key function to get the master key
+    # derive the master key using the KDF
     derrived_master_key = key_derivation_function(master_password, stored_salt.encode())[1]
-    print(f"this should be the derived master key: {derrived_master_key}")
 
-    # generating a brand new AES key for the vault
+    # generate a brand new AES key for the vault
     vault_key = generate_aes_key()
 
-    print(f"THIS SHOULD BE THE VAULT KEY: {vault_key}")
-
-    # encrypting the vault key for storage, the vault key is encrypted using the derrived master key
+    # encrypt the vault key for storage using the derived master key
     encrypted_vault_key = encryption(derrived_master_key, vault_key).decode()
-
-    print(f"THIS SHOULD BE THE ENCRYPTED VAULT KEY{encrypted_vault_key}")
     cursor.execute(f"""
     INSERT INTO vaults (vault_name, username, encrypted_key, created_at, update_at) VALUES (?, ?, ?, ?, ?)
                    """, (valut_name, username, encrypted_vault_key, datetime.now(), datetime.now()))

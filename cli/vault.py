@@ -15,7 +15,7 @@ def user_interface(username, master_password):
     print("3. View vaults")
     print("4. Select a vault")
     print("5. Logout")
-    user_input = get_number("Please enter your selection: ", [1, 2, 3, 4])
+    user_input = get_number("Please enter your selection: ", [1, 2, 3, 4, 5])
 
     if user_input == 1:
         new_password = str(input("Enter your new password: "))
@@ -30,7 +30,7 @@ def user_interface(username, master_password):
             time.sleep(5)
             user_interface(username, master_password)
 
-    if user_input == 2:
+    elif user_input == 2:
         vault_name_input = str(input("Enter a name for your vault (e.g. GMail): "))
         vault_creation = create_valut(username, master_password, vault_name_input)
 
@@ -39,7 +39,7 @@ def user_interface(username, master_password):
         else:
             print("An error occurred during the creation of the vault. Please try again.")
 
-    if user_input == 3:
+    elif user_input == 3:
         vaults_response = get_vaults(username)
 
         if len(vaults_response) == 0:
@@ -52,10 +52,13 @@ def user_interface(username, master_password):
                 print(f"{counter}. {vault[0]}")
                 counter += 1
 
-    if user_input == 4:
+    elif user_input == 4:
         vaults_response = get_vaults(username)
         vault_input = str(input("Enter the name of the vault you want to access: "))
         vault_details = retrieve_vault(username, vault_input)
+
+    elif user_input == 5:
+        return
 
 
 def vault_interface(username, master_password, vault_details):
@@ -65,11 +68,12 @@ def vault_interface(username, master_password, vault_details):
         counter += 1
     user_input = int(input("Select a vault: "))
 
-    if (user_input > counter) or not isinstance(user_input, int) or (user_input <= 0):
+    if user_input < 1 or user_input >= counter:
         print("Invalid selection. Please try again")
         vault_interface(username, master_password, vault_details)
     else:
-        print(f"You have selected the {vault}.")
+        selected_vault = vault_details[user_input - 1]
+        print(f"You have selected the {selected_vault[0]}.")
         print("**********OPTIONS*****")
         print("1. Create a new password")
         user_input_2 = int(input("select an option: "))
@@ -79,8 +83,8 @@ def vault_interface(username, master_password, vault_details):
             entry_creation_result = create_entry(
                 username=username,
                 master_password=master_password,
-                vault_name=vault_details[0],
-                encrypted_key=vault_details[2],
+                vault_name=selected_vault[0],
+                encrypted_key=selected_vault[2],
                 password_type=password_type_input,
                 password_input=password_user_input
             )

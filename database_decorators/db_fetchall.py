@@ -20,7 +20,8 @@ def fetch_all(function):
 
             return db_result
         except Exception as e:
-            return e
+            print(f"Database error: {e}")
+            return []
         finally:
             connection.close()
         
