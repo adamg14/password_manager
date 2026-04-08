@@ -14,10 +14,13 @@ def create_user(
         master_password_hash = generated_hash(master_password)
         salt = create_salt()
 
-        cursor.execute(f"""
+        query = """
         INSERT INTO users (username, master_password_hash, salt, created_at, updated_at) VALUES (?, ?, ?, ?, ?)
-                        """, (username, master_password_hash, salt, datetime.now(), datetime.now()))
-        return True
+                        """
+        
+        params = (username, master_password_hash, salt, datetime.now(), datetime.now())
+        
+        return query, params
 
 
 

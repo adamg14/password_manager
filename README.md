@@ -7,6 +7,7 @@ AES encryption, and SHA-512 hashing.
 ## Features                                                    
 Zero-knowledge design — master password is never stored      
 
+Database uses transactions to uphold ACID principals
 - AES-encrypted vault storage                                  
 - SHA-512 password hashing with salt                           
 - Multiple vaults per user (e.g. Gmail, Work, Banking)         

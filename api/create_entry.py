@@ -28,7 +28,9 @@ def create_entry(
     # encrypt the new password with the vault key
     encrypted_password = encryption(decrypted_key.encode(), password_input.encode())
 
-    cursor.execute("""
+    query = """
     INSERT INTO entries (id, vault_id, type, encrypted_data, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)
-                   """, (str(uuid.uuid4()), vault_name, password_type, encrypted_password, datetime.now(), datetime.now()))
-    return True
+                   """
+    
+    params = (str(uuid.uuid4()), vault_name, password_type, encrypted_password, datetime.now(), datetime.now())
+    return query, params

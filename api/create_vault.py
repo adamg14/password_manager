@@ -24,7 +24,8 @@ def create_valut(
 
     # encrypt the vault key for storage using the derived master key
     encrypted_vault_key = encryption(derrived_master_key, vault_key).decode()
-    cursor.execute(f"""
+    query = """
     INSERT INTO vaults (vault_name, username, encrypted_key, created_at, update_at) VALUES (?, ?, ?, ?, ?)
-                   """, (valut_name, username, encrypted_vault_key, datetime.now(), datetime.now()))
-    return True
+                   """
+    params = (valut_name, username, encrypted_vault_key, datetime.now(), datetime.now())
+    return query, params
