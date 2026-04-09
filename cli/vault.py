@@ -19,7 +19,7 @@ def user_interface(username, master_password):
 
     if user_input == 1:
         new_password = str(input("Enter your new password: "))
-        password_change_result = change_master_password(username, new_password)
+        password_change_result = change_master_password(username, password, new_password)
 
         if password_change_result:
             print("Your password has been changed.")
