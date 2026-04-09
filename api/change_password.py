@@ -47,15 +47,35 @@ def change_master_password(
     for vault in vaults:
         old_encrypted_key = vault[2]
         # decrypt the vault key using the old password
-
-        # encrypt the vault key using the new password
-        # to do this must derive the master password key with the new master_password_key
-
+        
         # get the salt for the user
         new_master_key = key_derivation_function(
             new_master_password,
             user_salt.encode()
         )
+
+        password_hash = {}
+        for entry in vault:
+            password_hash[entry[0]] = decryption(
+                old_encrypted_key.encode(),
+                entry[3].decode()
+            )
+        
+        # update all the entries associated with that vault
+        for vault_id, decrypted_password in password_hash:
+            # encrypt the entry with the new vault password
+            new_encryped_entry = encryption(
+                new_master_key,
+                decrypted_password.encode()
+            )
+            query = """UPDATE entries
+            SET encryped_data = ?
+            WHERE id = ?"""
+            params = (new_encryped_entry.decode(), vault_id)
+            cursor.execute(query, params)
+        # encrypt the vault key using the new password
+        # to do this must derive the master password key with the new master_password_key
+
 
         new_encryped_key = encryption(new_master_key.encode(), user_salt).decode()
 
