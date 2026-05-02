@@ -19,7 +19,7 @@ def user_interface(username, master_password):
 
     if user_input == 1:
         new_password = str(input("Enter your new password: "))
-        password_change_result = change_master_password(username, password, new_password)
+        password_change_result = change_master_password(username, master_password, new_password)
 
         if password_change_result:
             print("Your password has been changed.")
@@ -36,6 +36,9 @@ def user_interface(username, master_password):
 
         if vault_creation:
             print("Your vault has been created successfully.")
+            # go to the vault interface with the new vault just created
+            vault_details = retrieve_vault(username, vault_name_input)
+            vault_interface(username, master_password, vault_details)
         else:
             print("An error occurred during the creation of the vault. Please try again.")
 
@@ -56,7 +59,7 @@ def user_interface(username, master_password):
         vaults_response = get_vaults(username)
         vault_input = str(input("Enter the name of the vault you want to access: "))
         vault_details = retrieve_vault(username, vault_input)
-
+        vault_interface(username, master_password, vault_details)
     elif user_input == 5:
         return
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # first check that the datbase path already exists
-if [ -f "./password_manager" ]; then 
+if [ -f "./password_manager.db" ]; then 
     read -p "The Database already exists.
     Recreate it? 
     This will delete all data. (y/n): " confirm
@@ -33,15 +33,17 @@ CREATE TABLE IF NOT EXISTS users (
     username TEXT NOT NULL PRIMARY KEY,
     master_password_hash  TEXT NOT NULL,
     salt TEXT NOT NULL,
-    created_at DATE TIME NOT NULL,
-    updated_at DATE TIME NOT NULL
+    created_at DATE TIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATE TIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS valut(
-    username TEXT NOT NULL,
+CREATE TABLE IF NOT EXISTS vault(
     vault_id TEXT NOT NULL PRIMARY KEY,
+    vault_name TEXT NOT NULL,
+    username TEXT NOT NULL,
     encrypted_key TEXT NOT NULL,
-    created_at TIMESTAMP NOT NULL
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS entries (

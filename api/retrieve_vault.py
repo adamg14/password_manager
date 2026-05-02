@@ -6,5 +6,7 @@ def retrieve_vault(
     username,
     vault_name
 ):
-    query = f"""SELECT * FROM vaults WHERE username = ? and vault_name = ?"""
+    query = f"""SELECT * FROM vault WHERE username = ? and vault_name = ?"""
     return query, (username, vault_name)
+
+print(retrieve_vault('adam.worede.2', 'Gmail'))

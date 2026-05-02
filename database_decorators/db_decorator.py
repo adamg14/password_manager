@@ -29,8 +29,6 @@ def database_wrapper(function):
             connection = sqlite3.connect(DB_PATH)
             cursor = connection.cursor()
             query, params  = function(*args, **kwargs)
-            print(f"this should be the the query. {query}")
-            print(f"this should be th params of the query {params}")
             cursor.execute(query, params)
             connection.commit()
             return True
@@ -38,7 +36,6 @@ def database_wrapper(function):
             print(f"Database error: {e}")
             return None
         finally:
-            print("THE CONNECTION HAS CLOSED")
             connection.close()
     return wrapper
 
