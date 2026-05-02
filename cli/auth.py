@@ -42,5 +42,8 @@ def create_account():
             handle_login()
         else:
             print("An error occurred when creating an account, please try again later.")
+            print("""See the above logs for more clarity
+                  e.g A user with that username already exists
+                  """)
             from cli.home import home
             home()

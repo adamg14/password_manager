@@ -32,6 +32,13 @@ Dependencies listed in `requirements.txt`:
 ``shell
 pip install -r requirements.txt                                
 ```                                                            
+## Before running the Program:
+Before running the program. Please run the so that the database is initialised (the database file and tables created) for you to use.
+```shell
+chmod +x ./init_script.sh
+./init_script.sh
+```
+!! THIS BASH SCRIPT SHOULD BE EXECUTED ONCE ONLY BEFORE YOU USE THIS APPLICATION.
 
 ## Usage                                                       
 ```shell                                                       

@@ -28,13 +28,17 @@ def database_wrapper(function):
         try:
             connection = sqlite3.connect(DB_PATH)
             cursor = connection.cursor()
-            result = function(cursor, *args, **kwargs)
+            query, params  = function(*args, **kwargs)
+            print(f"this should be the the query. {query}")
+            print(f"this should be th params of the query {params}")
+            cursor.execute(query, params)
             connection.commit()
-            return result
+            return True
         except Exception as e:
             print(f"Database error: {e}")
             return None
         finally:
+            print("THE CONNECTION HAS CLOSED")
             connection.close()
     return wrapper
 

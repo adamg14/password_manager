@@ -7,7 +7,6 @@ from datetime import datetime
 
 @database_wrapper
 def create_user(
-        cursor,
         username,
         master_password
 ):
