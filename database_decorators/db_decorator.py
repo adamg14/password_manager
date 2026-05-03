@@ -3,7 +3,6 @@ from pathlib import Path
 
 DB_PATH = Path.home() / ".password_manager" / "password_manager.db"
 
-
 def transaction_decorator(function):
     def wrapper(*args, **kwargs):
         try:

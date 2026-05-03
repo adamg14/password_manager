@@ -8,7 +8,7 @@ from database_decorators.db_decorator import transaction_decorator
 from api.get_vaults import get_vaults
 from api.get_user import get_user
 from datetime import datetime
-import sqlite3 
+
 from pathlib import Path
 
 DB_PATH = Path.home() / ".password_manager" / "password_manager.db"
@@ -38,48 +38,17 @@ def change_master_password(
     vaults = get_vaults(
         username
     )
-    print(f"THIS SHOULD BE THE RESPONSE OF GET_VAULTS - SHOULD BE EMPTY: {vaults}")
-    user_salt = get_user(username)[2]
+    if len(vaults) == 0:
+        # the user currently has no vaults
+        # therefore this functionality only needs a single query
+        return result
+    else:
+        # the user has a vault - which may contain passwords
+        # therefore there are additional queries needing to be added to the results
+        # object to be executed for this functionality
+        user_salt = get_user(username)[2]
 
-    # for each vault
-    for vault in vaults:
-        old_encrypted_key = vault[2]
-        # decrypt the vault key using the old password
-        
-        # get the salt for the user
-        new_master_key = key_derivation_function(
-            new_master_password,
-            user_salt.encode()
-        )
-
-        password_hash = {}
-        for entry in vault:
-            password_hash[entry[0]] = decryption(
-                old_encrypted_key.encode(),
-                entry[3].decode()
-            )
-        
-        # update all the entries associated with that vault
-        for vault_id, decrypted_password in password_hash:
-            # encrypt the entry with the new vault password
-            new_encryped_entry = encryption(
-                new_master_key,
-                decrypted_password.encode()
-            )
-            query = """UPDATE entries
-            SET encryped_data = ?
-            WHERE id = ?"""
-            params = (new_encryped_entry.decode(), vault_id)
-            result[query] = params
-        # encrypt the vault key using the new password
-        # to do this must derive the master password key with the new master_password_key
-
-
-        new_encryped_key = encryption(new_master_key.encode(), user_salt).decode()
-
-        query = """UPDATE vault SET encrypted_key = ? WHERE id = ?"""
-        params = (new_encryped_key, vault[0])
-        result[query] = params
+    
     
 
     return result
