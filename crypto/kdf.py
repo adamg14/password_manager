@@ -15,7 +15,10 @@ def key_derivation_function(
     output:
         salt: bytes,
         key: bytes (AES265 key) """
-    salt = salt.decode()
+    if isinstance(salt, str):
+        salt = bytes.fromhex(salt)
+    elif isinstance(salt, bytes):
+        salt = bytes.fromhex(salt.decode())
     key = PBKDF2(master_password, salt, 32, count=1000000, hmac_hash_module=SHA512)
     return salt, key
 
