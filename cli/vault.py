@@ -5,6 +5,7 @@ from api.change_password import change_master_password
 from api.create_vault import create_valut
 from api.get_vaults import get_vaults
 from api.retrieve_vault import retrieve_vault
+from api.create_entry import create_entry
 # need to add create entry functionality
 
 from cli.utils import get_number
@@ -52,11 +53,18 @@ def user_interface(username, master_password):
             time.sleep(2)
             user_interface(username, master_password)
         else:
-            counter = 1
-            for vault in vaults_response:
-                print(f"{counter}. {vault[0]}")
-                counter += 1
-
+            vault_object = {}
+            for index, element in enumerate(vaults_response):
+                print(f"{index + 1}. Vault Name: {element[0]}")
+                vault_object[index + 1] = element
+            
+            user_vault_input = int(input("Please select a vault: "))
+            if user_vault_input in vault_object:
+                vault_interface(username, master_password, vault_object[user_vault_input])
+            else:
+                print("Invalid input.")
+                time.sleep(5)
+                user_interface(username, master_password)
     elif user_input == 4:
         vault_input = str(input("Enter the name of the vault you want to access: "))
         # remember if the user doesnt own the vault they still may have access to the vault
@@ -91,9 +99,15 @@ def vault_interface(username, master_passowrd, vault_details):
     user_input = get_number("Please enter your selection: ", [1, 2, 3, 4, 5])
     if user_input == 1:
         pass
-    if user_input == 2:
+    elif user_input == 2:
         user_name_input = str(input("enter the username of the user you want to grant vault access to: "))
         # grant access functionality
+    elif user_input == 3:
+        pass
+    # revoke access functionality
+    else:
+        # delete entry functionality
+        pass
 
 def select_vaults(username, master_password, vaults):
     # display the users vaults
