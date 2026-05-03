@@ -57,15 +57,10 @@ def user_interface(username, master_password):
             time.sleep(2)
             user_interface(username, master_password)
         else:
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> vault_functionality
             vaults = {}
             for counter, element in enumerate(vaults_response):
                 print(f"{counter + 1}. Vault Name: {element[1]}")
                 vaults[counter + 1] = element
-<<<<<<< HEAD
             
             user_select_vault = int(input("select an item: "))
             if user_select_vault in vaults:
@@ -76,13 +71,6 @@ def user_interface(username, master_password):
                 user_interface(username, master_password)
 
 
-=======
-            vault_object = {}
-            for index, element in enumerate(vaults_response):
-                print(f"{index + 1}. Vault Name: {element[0]}")
-                vault_object[index + 1] = element
-=======
->>>>>>> vault_functionality
             
             user_select_vault = int(input("select an item: "))
             if user_select_vault in vaults:
@@ -91,12 +79,7 @@ def user_interface(username, master_password):
                 print("invalid input.")
                 time.sleep(5)
                 user_interface(username, master_password)
-<<<<<<< HEAD
->>>>>>> vault_functionality
-=======
 
-
->>>>>>> vault_functionality
     elif user_input == 4:
         vault_input = str(input("Enter the name of the vault you want to access: "))
         # remember if the user doesnt own the vault they still may have access to the vault
@@ -125,7 +108,6 @@ def user_interface(username, master_password):
                 vault_interface(
                     username,
                     master_password,
-
                     retrieve_vault_id(access_check_map[user_input][1])
                 )
             else:

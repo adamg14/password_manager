@@ -52,6 +52,7 @@ def set_up():
             CREATE TABLE IF NOT EXISTS access_granted (
                 id TEXT NOT NULL PRIMARY KEY,
                 vault_id TEXT NOT NULL REFERENCES vault(vault_id),
+                vault_name TEXT NOT NULL,
                 username TEXT NOT NULL,
                 access_give TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );""")

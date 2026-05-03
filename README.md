@@ -60,3 +60,17 @@ python main.py
     chmod +x testing_script.sh
     ./testing_script.sh
 ```                                                                                                                                                 
+
+## Flow of Project
+1. master password + salt
+    - master password stored in user's local session (it is never stored in the database)
+    - salt (which works in the key derivation function as an input - it's decoded value is stored in the users' database table)
+
+2. KDF function
+3. derived master key  (raw binary)
+4. The derived master key (derived using the KDF with the salt and the raw master password as inputs) use it to decrypt the vault key from the database
+5. decrypted vault key  (raw binary)
+6. use it to encrypt the new password
+7. encrypted password  (raw binary)
+8. base64 encode it so it can be stored as text in SQLite
+9. store in database

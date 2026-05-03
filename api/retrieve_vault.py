@@ -9,3 +9,9 @@ def retrieve_vault(
     query = f"""SELECT * FROM vault WHERE username = ? and vault_name = ?"""
     return query, (username, vault_name)
 
+@fetch_one
+def retrieve_vault_id(
+    vault_id
+):
+    query = f"""SELECT * FROM vault WHERE vault_id = ?"""
+    return query, (vault_id)
