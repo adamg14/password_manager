@@ -9,4 +9,3 @@ def retrieve_vault(
     query = f"""SELECT * FROM vault WHERE username = ? and vault_name = ?"""
     return query, (username, vault_name)
 
-print(retrieve_vault('adam.worede.2', 'Gmail'))

@@ -3,7 +3,7 @@ from crypto.decryption import decryption
 from crypto.encryption import encryption
 from crypto.kdf import key_derivation_function
 
-from database_decorators.db_decorator import database_wrapper
+from database_decorators.db_decorator import transaction_decorator
 
 from api.get_vaults import get_vaults
 from api.get_user import get_user
@@ -15,16 +15,15 @@ FILE_PATH = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(FILE_PATH, "..", "password_manager.db")
 
 
+# this functionality my have more than one execution query therefore it needs to be wrapper within a transaction
+@transaction_decorator
 def change_master_password(
-    cursor,
     username,
     current_password,
     new_master_password
 ):
-    connection = sqlite3.connect(DB_PATH)
-    cursor = connection.cursor()
-    # being the transaction so the update of the password and the consequent changes are ATOMIC in line with ACID principles
-    cursor.execute("BEGIN TRANSACTION;")   
+    # dictionary holding a hashmap between the query and the parameters
+    result = {}
     new_password_hash = generated_hash(new_master_password)
 
     query = """
@@ -33,14 +32,14 @@ def change_master_password(
     updated_at = ?
     WHERE username = ?"""
     params = (new_password_hash, datetime.now(), username)
+    result[query] = params
 
-    cursor.execute(query, params)
-
-    # retieve all the vaults that belongs to the user 
+    # retieve all the vaults that belongs to the user
+    # as if the password changes, the vault should be re-encrypted
     vaults = get_vaults(
         username
     )
-
+    print(f"THIS SHOULD BE THE RESPONSE OF GET_VAULTS - SHOULD BE EMPTY: {vaults}")
     user_salt = get_user(username)[2]
 
     # for each vault
@@ -72,7 +71,7 @@ def change_master_password(
             SET encryped_data = ?
             WHERE id = ?"""
             params = (new_encryped_entry.decode(), vault_id)
-            cursor.execute(query, params)
+            result[query] = params
         # encrypt the vault key using the new password
         # to do this must derive the master password key with the new master_password_key
 
@@ -81,12 +80,11 @@ def change_master_password(
 
         query = """UPDATE vault SET encrypted_key = ? WHERE id = ?"""
         params = (new_encryped_key, vault[0])
+        result[query] = params
+    
 
-    # comit the transaction so that the changes to the db are atomic
-    # get all the vaul
-    cursor.execute("COMMIT;")
-    connection.commit()
-    connection.close()
-    return True
-    
-    
+    return result
+    # there are multiple execution statements for this statement
+    # therefore they need to be ran as an atomic transaction
+    # so if at any point of executiong the required queries in this function
+    # there are interruptions, all the changes must be rolledback

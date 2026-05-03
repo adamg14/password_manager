@@ -14,13 +14,20 @@ def transaction_decorator(function):
             # function returns a list of queries it needs to be atomic
             cursor.execute("BEGIN TRANSACTION;")
             # function runs the queries within the transactions
-            result = function(cursor, *args, **kwargs)
-            cursor.execute("COMMIT;")
+            result = function(*args, **kwargs)
+            for query, params in result.items():
+                cursor.execute(query, params)
             connection.commit()
-            return result
+            return True
         except Exception as e:
             print(f"Database error: {e}")
+            # rollback any changes to the database if connection is interrupted
+            # this ensures atomicity
+            connection.rollback()
             return None
+        finally:
+            connection.close()
+    return wrapper
         
         
 def database_wrapper(function):

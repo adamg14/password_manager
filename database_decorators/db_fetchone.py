@@ -12,8 +12,7 @@ def fetch_one(function):
             cursor = connection.cursor()
 
             result = function(*args, **kwargs)
-            query = result[0]
-            params = result[1]
+            query, params = result
 
             cursor.execute(query, params)
 

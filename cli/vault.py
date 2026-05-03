@@ -1,10 +1,12 @@
 import time
+import sys
 
 from api.change_password import change_master_password
 from api.create_vault import create_valut
 from api.get_vaults import get_vaults
 from api.retrieve_vault import retrieve_vault
-from api.create_entry import create_entry
+# need to add create entry functionality
+
 from cli.utils import get_number
 
 
@@ -14,13 +16,13 @@ def user_interface(username, master_password):
     print("2. Create vault")
     print("3. View vaults")
     print("4. Select a vault")
-    print("5. Logout")
+    print("5. View someone else's vault")
+    print("6. Logout/Exit")
     user_input = get_number("Please enter your selection: ", [1, 2, 3, 4, 5])
 
     if user_input == 1:
         new_password = str(input("Enter your new password: "))
         password_change_result = change_master_password(username, master_password, new_password)
-
         if password_change_result:
             print("Your password has been changed.")
             time.sleep(5)
@@ -44,7 +46,7 @@ def user_interface(username, master_password):
 
     elif user_input == 3:
         vaults_response = get_vaults(username)
-
+        # must also display the vaults that they have been given access to 
         if len(vaults_response) == 0:
             print("You currently do not have any vaults.")
             time.sleep(2)
@@ -56,43 +58,43 @@ def user_interface(username, master_password):
                 counter += 1
 
     elif user_input == 4:
-        vaults_response = get_vaults(username)
         vault_input = str(input("Enter the name of the vault you want to access: "))
+        # remember if the user doesnt own the vault they still may have access to the vault
+        # need to also check the access_granted table to ensure this    
         vault_details = retrieve_vault(username, vault_input)
         vault_interface(username, master_password, vault_details)
     elif user_input == 5:
-        return
+        # delete user details from memory
+        del username
+        del master_password
+        # send the user back to the home page
+        sys.exit()
+        
 
+def vault_interface(username, master_passowrd, vault_details):
+    display_vault = {
+        "vault_id": 0,
+        "vault_name": 1,
+        "created_at": 4,
+        "updated_at": 5
+    }
+    print("**********VAULT DETAILS**********")
+    for name, index in display_vault:
+        print(f"{name}: {vault_details[index]}")
+    
+    print("**********select an option**********")
+    print("1. Create new password")
+    print("2. Give access")
+    print("3. Revoke access")
+    print("4. Delete password")
 
-def vault_interface(username, master_password, vault_details):
-    counter = 1
-    for vault in vault_details:
-        print(f"{counter}. {vault[0]}")
-        counter += 1
-    user_input = int(input("Select a vault: "))
+    user_input = get_number("Please enter your selection: ", [1, 2, 3, 4, 5])
+    if user_input == 1:
+        pass
+    if user_input == 2:
+        user_name_input = str(input("enter the username of the user you want to grant vault access to: "))
+        # grant access functionality
 
-    if user_input < 1 or user_input >= counter:
-        print("Invalid selection. Please try again")
-        vault_interface(username, master_password, vault_details)
-    else:
-        selected_vault = vault_details[user_input - 1]
-        print(f"You have selected the {selected_vault[0]}.")
-        print("**********OPTIONS*****")
-        print("1. Create a new password")
-        user_input_2 = int(input("select an option: "))
-        if user_input_2 == 1:
-            password_type_input = str(input("Enter the type of password (e.g. login): "))
-            password_user_input = str(input("Enter the password: "))
-            entry_creation_result = create_entry(
-                username=username,
-                master_password=master_password,
-                vault_name=selected_vault[0],
-                encrypted_key=selected_vault[2],
-                password_type=password_type_input,
-                password_input=password_user_input
-            )
-
-            if entry_creation_result:
-                print("Entry created successfully.")
-            else:
-                print("An error occurred when trying to create the entry. Please try again later.")
+def select_vaults(username, master_password, vaults):
+    # display the users vaults
+    vault_name = str(input("Enter the name of the vault you would like to access: "))

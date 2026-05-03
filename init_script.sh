@@ -48,10 +48,17 @@ CREATE TABLE IF NOT EXISTS vault(
 
 CREATE TABLE IF NOT EXISTS entries (
     id TEXT NOT NULL PRIMARY KEY,
-    vault_id TEXT NOT NULL REFERENCES vaults(valut_id),
+    vault_id TEXT NOT NULL REFERENCES vault(vault_id),
     type TEXT NOT NULL DEFAULT 'login',
     encrypted_data TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS access_granted (
+    id TEXT NOT NULL PRIMARY KEY,
+    vault_id TEXT NOT NULL REFERENCES vault(vault_id),
+    username TEXT NOT NULL,
+    access_give TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 EOF
