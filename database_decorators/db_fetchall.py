@@ -1,8 +1,7 @@
 import sqlite3
-import os
+from pathlib import Path
 
-FILE_PATH = os.path.dirname(os.path.abspath(__file__))
-DB_PATH = os.path.join(FILE_PATH, "..", "password_manager.db")
+DB_PATH = Path.home() / ".password_manager" / "password_manager.db"
 
 def fetch_all(function):
     def wrapper(*args, **kwargs):

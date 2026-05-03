@@ -1,9 +1,9 @@
 
 import os
+from pathlib import Path
 
-FILE_PATH = os.path.dirname(os.path.abspath(__file__))
-DB_PATH = os.path.join(FILE_PATH, "..", "password_manager.db")
-
+DB_PATH = Path.home() / ".password_manager" / "password_manager.db"
+DB_PATH.parent.mkdir(parents=True, exist_ok=True)
 
 def set_up():
     try:
@@ -55,7 +55,8 @@ def set_up():
                 username TEXT NOT NULL,
                 access_give TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );""")
-        cursor.commit()
+        connection.commit()
+        print("set up completed successfully.")
         return 1
     except Exception as e:
         print(f"Set up error occurred: {e}")

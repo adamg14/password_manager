@@ -9,10 +9,9 @@ from api.get_vaults import get_vaults
 from api.get_user import get_user
 from datetime import datetime
 import sqlite3 
-import os
+from pathlib import Path
 
-FILE_PATH = os.path.dirname(os.path.abspath(__file__))
-DB_PATH = os.path.join(FILE_PATH, "..", "password_manager.db")
+DB_PATH = Path.home() / ".password_manager" / "password_manager.db"
 
 
 # this functionality my have more than one execution query therefore it needs to be wrapper within a transaction
