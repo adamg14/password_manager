@@ -15,7 +15,11 @@ def set_up():
 
         connection = sqlite3.connect(DB_PATH)
         cursor = connection.cursor()
-
+        cursor.execute("DROP TABLE IF EXISTS users;")
+        cursor.execute("DROP TABLE IF EXISTS vault;")
+        cursor.execute("DROP TABLE IF EXISTS entries;")
+        cursor.execute("DROP TABLE IF EXISTS accesss_granted;")
+        print("tables dropped successfully")
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS users (
                 username TEXT NOT NULL PRIMARY KEY,

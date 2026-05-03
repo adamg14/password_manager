@@ -16,11 +16,9 @@ def create_valut(
     
     # retrieve the salt dedicated to the user
     stored_salt = get_salt(username)[0]
-    print(f"this should be the stored salt: {stored_salt}")
 
     # derive the master key using the KDF
     derrived_master_key = key_derivation_function(master_password, stored_salt.encode())[1]
-    print(f"this should be the derived master password: {derrived_master_key}")
     # generate a brand new AES key for the vault
     vault_key = generate_aes_key()
 

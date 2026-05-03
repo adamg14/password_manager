@@ -170,7 +170,11 @@ def vault_interface(username, master_password, vault_details):
         if create_entry_result:
             print("Your password has been created successfully.")
             print("You will be taken back to the vault interface.")
-            vault_interface()
+            vault_interface(
+                username,
+                master_password,
+                vault_details
+            )
         else:
             print("an error occurred when creating the password entry. please try again")
             time.sleep(5)
