@@ -4,11 +4,11 @@ import sys
 from api.change_password import change_master_password
 from api.create_vault import create_valut
 from api.get_vaults import get_vaults
-from api.retrieve_vault import retrieve_vault, retrieve_vault_id
+from api.retrieve_vault import retrieve_vault, retrieve_vault_id, retrieve_vault_name
 from api.create_entry import create_entry
 from api.get_entries import get_entries
 from api.decrypt_entry import decrypt_entry
-
+from api.delete_vault import delete_vault
 from cli.utils import get_number
 from cli.home import home
 
@@ -19,7 +19,8 @@ def user_interface(username, master_password):
     print("2. Create vault")
     print("3. View vaults")
     print("4. Select a vault")
-    print("5. Logout/Exit")
+    print("5. Delete vault")
+    print("6. Logout/Exit")
     user_input = get_number("Please enter your selection: ", [1, 2, 3, 4, 5, 6])
 
     if user_input == 1:
@@ -83,8 +84,20 @@ def user_interface(username, master_password):
         # need to also check the access_granted table to ensure this    
         vault_details = retrieve_vault(username, vault_input)
         vault_interface(username, master_password, vault_details)
-
+    
     elif user_input == 5:
+        delete_vault_input = str(input("enter the name of the vault you would like to delete: "))
+        retrieve_vault_result = retrieve_vault_name(delete_vault_input)
+        if len(retrieve_vault_result) == 0:
+            print("This vault does not exist. ")
+        else:
+            delete_result = delete_vault(retrieve_vault_result[0])
+            if delete_result:
+                print("Vault deleted successfully.")
+                time.sleep(5)
+                user_interface(username, master_password)
+
+    else:
         # delete user details from memory
         del username
         del master_password

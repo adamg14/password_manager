@@ -14,4 +14,11 @@ def retrieve_vault_id(
     vault_id
 ):
     query = f"""SELECT * FROM vault WHERE vault_id = ?"""
-    return query, (vault_id)
+    return query, (vault_id,)
+
+@fetch_one
+def retrieve_vault_name(
+    vault_name
+):
+    query = """SELECT * FROM vault WHERE vault_name = ?"""
+    return query, (vault_name, )
