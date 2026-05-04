@@ -2,3 +2,4 @@ password_manager.db
 project.txt
 __pycache__
 .pytest_cache
+.gitignore
