@@ -11,6 +11,8 @@ def create_user(
         master_password
 ):
         master_password_hash = generated_hash(master_password)
+        # salt is 32 random bytes
+        # converted into hexadecimal
         salt = create_salt()
 
         query = """
