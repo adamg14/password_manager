@@ -9,6 +9,7 @@ from api.create_entry import create_entry
 from api.get_entries import get_entries
 from api.decrypt_entry import decrypt_entry
 from api.delete_vault import delete_vault
+from api.delete_entry import delete_entry
 from cli.utils import get_number
 from cli.home import home
 
@@ -137,7 +138,6 @@ def vault_interface(username, master_password, vault_details):
 
         get_all_entries = get_entries(vault_details[0])
 
-        print(f"this should be the response from get entries: {get_all_entries}")
 
         if len(get_all_entries) == 0:
             print("You have no password entries in this vault.")
@@ -187,19 +187,30 @@ def vault_interface(username, master_password, vault_details):
             print("an error occurred when creating the password entry. please try again")
             time.sleep(5)
             vault_interface(username, master_password, vault_details)
+
     elif user_input == 3:
         user_input = str(input("enter the name of the entry you would like to delete: "))
         user_entries = get_entries(vault_details[0])
         entries_name = [x[3]for x in user_entries]
-
         if user_input not in entries_name:
             print("This entry does not exist in this vault")
             time.sleep(5)
             vault_interface(username, master_password, vault_details)
         else:
-            pass
-            # create functionality for deleteing a vault based of its name
-            # e.g. type column
+            delete_entry_result = delete_entry(
+                vault_details[0],
+                user_input
+            )
+            if delete_entry_result:
+                print("This entry has been successfully delete from the vault.")
+                time.sleep(5)
+                vault_interface(username,master_password,vault_details)
+            else:
+                print("An error occurred when deleting this entry from the vault.")
+                print("Please try again.")
+                time.sleep(5)
+                vault_interface(username,master_password,vault_details)
+            
     elif user_input == 4:
         del username
         del master_password
