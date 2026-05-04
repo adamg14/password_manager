@@ -175,7 +175,18 @@ def vault_interface(username, master_password, vault_details):
             time.sleep(5)
             vault_interface(username, master_password, vault_details)
     elif user_input == 3:
-        pass
+        user_input = str(input("enter the name of the entry you would like to delete: "))
+        user_entries = get_entries(vault_details[0])
+        entries_name = [x[3]for x in user_entries]
+
+        if user_input not in entries_name:
+            print("This entry does not exist in this vault")
+            time.sleep(5)
+            vault_interface(username, master_password, vault_details)
+        else:
+            pass
+            # create functionality for deleteing a vault based of its name
+            # e.g. type column
     elif user_input == 4:
         del username
         del master_password

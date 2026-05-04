@@ -1,6 +1,5 @@
 import sqlite3
 from pathlib import Path
-import traceback
 
 
 DB_PATH = Path.home() / ".password_manager" / "password_manager.db"
@@ -42,7 +41,6 @@ def database_wrapper(function):
             return True
         except Exception as e:
             print(f"Database error: {e}")
-            traceback.print_exc()
             return None
         finally:
             connection.close()
