@@ -13,6 +13,7 @@ from cryptography.fernet import Fernet
 def create_entry(
     username,
     master_password,
+    vault_id,
     vault_name,
     encrypted_key,
     password_type,
@@ -43,8 +44,8 @@ def create_entry(
     decoded_password = base64.b64encode(encrypted_password).decode("utf-8")
     print(f"this should be the decoded encrypted password in utf-8: {decoded_password}")
     query = """
-    INSERT INTO entries (id, vault_id, type, encrypted_data, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)
+    INSERT INTO entries (id, vault_id, vault_name, type, encrypted_data, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)
                    """
     
-    params = (str(uuid.uuid4()), vault_name, password_type, decoded_password, datetime.now(), datetime.now())
+    params = (str(uuid.uuid4()), vault_id, vault_name, password_type, decoded_password, datetime.now(), datetime.now())
     return query, params

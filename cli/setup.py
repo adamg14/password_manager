@@ -15,11 +15,9 @@ def set_up():
 
         connection = sqlite3.connect(DB_PATH)
         cursor = connection.cursor()
-        cursor.execute("DROP TABLE IF EXISTS users;")
-        cursor.execute("DROP TABLE IF EXISTS vault;")
-        cursor.execute("DROP TABLE IF EXISTS entries;")
-        cursor.execute("DROP TABLE IF EXISTS accesss_granted;")
-        print("tables dropped successfully")
+        # cursor.execute("DROP TABLE IF EXISTS users; ")
+        # cursor.execute("DROP TABLE IF EXISTS vault; ")
+        # cursor.execute("DROP TABLE IF EXISTS entries; ")
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS users (
                 username TEXT NOT NULL PRIMARY KEY,
@@ -45,6 +43,7 @@ def set_up():
             CREATE TABLE IF NOT EXISTS entries (
                 id TEXT NOT NULL PRIMARY KEY,
                 vault_id TEXT NOT NULL REFERENCES vault(vault_id),
+                vault_name TEXT NOT NULL,
                 type TEXT NOT NULL DEFAULT 'login',
                 encrypted_data TEXT NOT NULL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -52,14 +51,6 @@ def set_up():
             );
         """)
 
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS access_granted (
-                id TEXT NOT NULL PRIMARY KEY,
-                vault_id TEXT NOT NULL REFERENCES vault(vault_id),
-                vault_name TEXT NOT NULL,
-                username TEXT NOT NULL,
-                access_give TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );""")
         connection.commit()
         print("set up completed successfully.")
         return 1

@@ -61,7 +61,7 @@ python main.py
     ./testing_script.sh
 ```                                                                                                                                                 
 
-## Flow of Project
+## Flow of Project (Encryption  )
 1. master password + salt
     - master password stored in user's local session (it is never stored in the database)
     - salt (which works in the key derivation function as an input - it's decoded value is stored in the users' database table)
@@ -74,3 +74,5 @@ python main.py
 7. encrypted password  (raw binary)
 8. base64 encode it so it can be stored as text in SQLite
 9. store in database
+
+## Backwards Flow (Inverse/Decryption)

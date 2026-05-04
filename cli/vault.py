@@ -6,11 +6,12 @@ from api.create_vault import create_valut
 from api.get_vaults import get_vaults
 from api.retrieve_vault import retrieve_vault, retrieve_vault_id
 from api.create_entry import create_entry
-from api.check_access_granted import check_access_granted
-
+from api.get_entries import get_entries
+from api.decrypt_entry import decrypt_entry
 
 from cli.utils import get_number
 from cli.home import home
+
 
 def user_interface(username, master_password):
     print("********************SELECT AN OPTION***************")
@@ -18,8 +19,7 @@ def user_interface(username, master_password):
     print("2. Create vault")
     print("3. View vaults")
     print("4. Select a vault")
-    print("5. View someone else's vault")
-    print("6. Logout/Exit")
+    print("5. Logout/Exit")
     user_input = get_number("Please enter your selection: ", [1, 2, 3, 4, 5, 6])
 
     if user_input == 1:
@@ -70,9 +70,6 @@ def user_interface(username, master_password):
                 time.sleep(5)
                 user_interface(username, master_password)
 
-
-            
-            user_select_vault = int(input("select an item: "))
             if user_select_vault in vaults:
                 vault_interface(username, master_password, vaults[user_select_vault])
             else:
@@ -86,37 +83,8 @@ def user_interface(username, master_password):
         # need to also check the access_granted table to ensure this    
         vault_details = retrieve_vault(username, vault_input)
         vault_interface(username, master_password, vault_details)
+
     elif user_input == 5:
-        # check for all the external vault this user has access to
-        print("**********EXTERNAL VAULT ACCESS*****")
-        access_check_result = check_access_granted(username)
-
-        if len(check_access_granted) == 0:
-            print("You have no access to external.")
-            time.sleep(5)
-        else:
-            # this willl be an array of entries in the format
-            # element : (id, vault_id, vault_name, username)
-            access_check_map = {}
-            for index, record in enumerate(access_check_result):
-                print(f"{index + 1}. {record[2]}")
-                access_check_map[index + 1] = record
-            user_input = int(input("select the vault you want to access"))
-            if user_input in access_check_map:
-                # get the vaults details based on the vault id 
-                # which is the second element
-                vault_interface(
-                    username,
-                    master_password,
-                    retrieve_vault_id(access_check_map[user_input][1])
-                )
-            else:
-                print("Invalid selection")
-                time.sleep(5)
-                user_interface(username, master_password)
-
-
-    elif user_input == 6:
         # delete user details from memory
         del username
         del master_password
@@ -140,21 +108,47 @@ def vault_interface(username, master_password, vault_details):
         "created_at": 4,
         "updated_at": 5
     }
-    print("**********VAULT DETAILS**********")
+    print("********** VAULT DETAILS**********")
     for name, index in display_vault.items():
         print(f"{name}: {vault_details[index]}")
     
     print("**********select an option**********")
     print("1. view passwords")
     print("2. Create new password")
-    print("3. Give access")
-    print("4. Revoke access")
-    print("5. Delete password")
-    print("6. Logout")
-    user_input = get_number("Please enter your selection: ", [1, 2, 3, 4, 5, 6])
+    print("3. Delete password")
+    print("4. Logout")
+    user_input = get_number("Please enter your selection: ", [1, 2, 3, 4])
+
     if user_input == 1:
-        print(f"**********Vault  - {vault_details[1]} - Passwords: **********")
-        
+        print(f"********** Vault  - {vault_details[1]} - Passwords: **********")
+
+        get_all_entries = get_entries(vault_details[0])
+
+        print(f"this should be the response from get entries: {get_all_entries}")
+
+        if len(get_all_entries) == 0:
+            print("You have no password entries in this vault.")
+            time.sleep(5)
+            vault_interface(username, master_password, vault_details)
+        else:
+            for index, password in enumerate(get_all_entries):
+                print("********************")
+                print(f"PASSWORD {index + 1}:")
+                print(f"PASSWORD TYPE: {password[3]}")
+                print(f"PASSWORD: {
+                    decrypt_entry(
+                        username,
+                        master_password,
+                        # this encrypted vault key is a string since it is coming straight from the database
+                        vault_details[3],
+                        password[4]
+                    )
+                    }")
+                print("********************")
+            
+            time.sleep(20)
+
+
     elif user_input == 2:
         password_type_input = str(input("Enter the password type (e.g. authentication): "))
         password_input = str(input("Enter the password: "))
@@ -162,6 +156,7 @@ def vault_interface(username, master_password, vault_details):
         create_entry_result = create_entry(
             username,
             master_password,
+            vault_details[0],
             vault_details[1],
             vault_details[3],
             password_type_input,
@@ -179,22 +174,12 @@ def vault_interface(username, master_password, vault_details):
             print("an error occurred when creating the password entry. please try again")
             time.sleep(5)
             vault_interface(username, master_password, vault_details)
-    elif user_input == 2:
-        user_name_input = str(input("enter the username of the user you want to grant vault access to: "))
-        # grant access functionality
     elif user_input == 3:
         pass
     elif user_input == 4:
-        pass
-    # revoke access functionality
-    elif user_input == 5:
         del username
         del master_password
         del vault_details
-        home()
-        # delete entry functionality
-        pass
+        sys.exit()
 
-def select_vaults(username, master_password, vaults):
-    # display the users vaults
-    vault_name = str(input("Enter the name of the vault you would like to access: "))
+
